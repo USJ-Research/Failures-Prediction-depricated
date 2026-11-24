@@ -1,38 +1,40 @@
-# AI-Driven Predictive Failure Detection in Progressive Kubernetes Deployments
+# AI-Driven Predictive Failure Detection for Kubernetes Deployments
 
-## Project Overview
-This repository contains the machine learning experiments for our research project at the University of Sri Jayewardenepura.
-
-Our goal is to develop an AI-based approach to predict potential failures during progressive Kubernetes deployments.
-
-## Current Implementation
-We have developed an initial log classification pipeline using:
-
-- Random Forest
-- XGBoost
-- TF-IDF feature extraction
-- Google Colab
+This repository contains a machine learning experiment for detecting server errors in Kubernetes application logs.
 
 ## Dataset
+
 - 13,300 log records
 - 89 unique log patterns
-- Normal/non-server-error logs (Class 0)
-- Server-error logs (Class 1)
-- Includes synthetic error logs
+- Fields: event, HTTP method, request path, and status code
+- Binary labels based on HTTP status:
+  - `0`: Normal or non-server-error
+  - `1`: Server error (500+)
 
-## Model Evaluation
-The Random Forest model achieved 91.82% accuracy on an unseen-pattern split, but server-error recall was only 3.74%.
+## Implementation
 
-This indicates that additional data diversity and model improvements are required.
+The repository includes a Google Colab notebook that:
 
-XGBoost training has been completed, with evaluation to follow.
+- Cleans and explores the dataset
+- Combines log fields into text features
+- Uses TF-IDF for feature extraction
+- Trains a balanced Random Forest classifier
+- Evaluates performance using accuracy and classification metrics
+- Tests predictions on new log entries
+- Exports the trained model as a `.pkl` file
 
-## Future Work
-- Compare machine learning algorithms
-- Improve log dataset diversity
-- Collect real-time logs using Loki and Prometheus
-- Extract time-based features during canary deployments
-- Predict failure risks and support continue, pause, or rollback decisions
+## Current Result
+
+The Random Forest model achieved 100% accuracy on a random 80/20 stratified test split. This result requires further validation on unseen patterns and real-world logs.
 
 ## Technologies
-Python, Scikit-learn, XGBoost, Google Colab, Kubernetes, Prometheus, Loki and Grafana.
+
+Python, Pandas, Scikit-learn, XGBoost, Matplotlib, Joblib, Jupyter, and Google Colab.
+
+## Future Work
+
+- Validate performance on unseen log patterns
+- Improve dataset diversity
+- Compare multiple ML algorithms
+- Add Prometheus and Loki log collection
+- Support continue, pause, and rollback decisions
